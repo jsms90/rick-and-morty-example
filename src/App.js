@@ -5,6 +5,7 @@ import ApolloClient from "apollo-boost";
 import { ApolloProvider, Query } from "react-apollo";
 import fetch from 'node-fetch'
 
+import HomePage from './HomePage'
 import SideBar from './SideBar/'
 import CharacterList from './Characters/'
 
@@ -71,22 +72,21 @@ const CHARACTERS_QUERY = gql`
   }
 `
 
-const App = () => (
-  <ApolloProvider client={client}>
-    <Query query={CHARACTERS_QUERY}>
-    {({loading, error, data}) => {
-      console.log(data)
-      if (loading) return 'loading...'
-      if (error) return `Error! ${error.message}`
-      return (
-      <Wrapper>
-        <StyledSideBar />
-        <StyledCharacterList characters={data.characters.results} />
-      </Wrapper>
-      )
-    }}
-    </Query>
-  </ApolloProvider>
-);
+class App extends React.Component {
+  
+  render () {
+    return (
+      <ApolloProvider client={client}>
+        <Query query={CHARACTERS_QUERY}>
+        {({loading, error, data}) => {
+          if (loading) return 'loading...'
+          if (error) return `Error! ${error.message}`
+          return <HomePage characters={data.characters.results}/>
+        }}
+        </Query>
+      </ApolloProvider>
+    )
+}
+};
 
 export default App;
